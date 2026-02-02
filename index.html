@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Captain & Comrade 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Righteous&family=DM+Sans:wght@400;500;700&family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --pink:#FFB3D9;
+  --soft-pink:#FFE5F1;
+  --coral:#FF8FAB;
+  --soft-red:#FF6B9D;
+  --text:#5A4A4A
+}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:linear-gradient(135deg,#FFF5E4,#FFE5F1);
+  color:var(--text)
+}
+.container{max-width:900px;margin:auto;padding:20px}
+.page{animation:fadeIn .8s ease}
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(30px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.hero{text-align:center;padding:80px 20px}
+.hero h1{
+  font-family:'Righteous';
+  font-size:clamp(2.5rem,8vw,4.5rem);
+  color:var(--soft-red)
+}
+.button-container{
+  margin-top:40px;
+  display:flex;
+  gap:20px;
+  justify-content:center
+}
+.btn{
+  font-family:'Fredoka';
+  padding:18px 45px;
+  font-size:1.4rem;
+  border:none;
+  border-radius:40px;
+  cursor:pointer
+}
+.btn-yes{
+  background:linear-gradient(135deg,var(--soft-red),var(--coral));
+  color:#fff
+}
+.btn-no{background:#ddd}
+#noMessage{margin-top:20px;font-weight:600;color:#FF6B9D}
+
+.section{
+  background:#fff;
+  border-radius:20px;
+  padding:40px;
+  margin-top:40px;
+  box-shadow:0 10px 30px rgba(0,0,0,.1)
+}
+.section-title{
+  font-family:'Righteous';
+  color:var(--soft-red);
+  font-size:2.3rem;
+  text-align:center;
+  margin-bottom:25px
+}
+
+.envelope{width:180px;height:130px;margin:auto;cursor:pointer}
+.envelope-body{
+  width:100%;
+  height:100%;
+  background:linear-gradient(135deg,var(--soft-pink),var(--pink));
+  border-radius:10px;
+  position:relative
+}
+.envelope-flap{
+  position:absolute;
+  top:0;
+  width:100%;
+  height:50%;
+  background:linear-gradient(135deg,var(--coral),var(--soft-red));
+  clip-path:polygon(0 0,100% 0,50% 100%);
+  transform-origin:top;
+  transition:.5s
+}
+.envelope.open .envelope-flap{transform:rotateX(180deg)}
+
+.letter-text{
+  background:#FFFEF9;
+  padding:25px;
+  border-radius:15px;
+  margin-top:25px;
+  font-style:italic;
+  line-height:1.8
+}
+
+.next-btn{margin-top:25px;text-align:center;display:none}
+.next-btn button{
+  padding:12px 30px;
+  border:none;
+  border-radius:25px;
+  background:#FF6B9D;
+  color:white;
+  font-size:1.1rem;
+  cursor:pointer
+}
+
+.photo-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:25px
+}
+.photo-card{
+  background:#fff;
+  border-radius:20px;
+  padding:20px;
+  box-shadow:0 8px 20px rgba(0,0,0,.1);
+  cursor:pointer
+}
+.photo-placeholder{
+  background:linear-gradient(135deg,var(--soft-pink),var(--pink));
+  border-radius:15px;
+  aspect-ratio:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:3rem
+}
+.photo-content{display:none}
+.photo-content.revealed{display:block}
+.photo-content img{width:100%;border-radius:15px}
+
+/* PURPLE GLOW */
+.glow-line{
+  margin-top:25px;
+  text-align:center;
+  font-family:'Righteous';
+  font-size:1.6rem;
+  color:#9B5CFF;
+  text-shadow:
+    0 0 12px rgba(155,92,255,0.8),
+    0 0 25px rgba(155,92,255,0.6),
+    0 0 40px rgba(155,92,255,0.5);
+  opacity:0;
+  animation:glowFadeIn 2s ease forwards
+}
+@keyframes glowFadeIn{
+  from{opacity:0;transform:scale(.9)}
+  to{opacity:1;transform:scale(1)}
+}
+
+.final-love{
+  margin-top:40px;
+  text-align:center;
+  font-family:'Righteous';
+  font-size:2rem;
+  color:#FF4F8B;
+  text-shadow:0 0 12px rgba(255,79,139,0.7),
+              0 0 25px rgba(255,79,139,0.6),
+              0 0 40px rgba(255,79,139,0.5);
+  animation:lovePulse 2.5s ease-in-out infinite;
+}
+@keyframes lovePulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.05)}
+}
+
+.firework{
+  position:fixed;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  animation:explode 1.2s ease-out forwards;
+  pointer-events:none
+}
+@keyframes explode{
+  to{transform:translate(var(--x),var(--y)) scale(0);opacity:0}
+}
+
+.petal{
+  position:fixed;
+  top:-10px;
+  font-size:1.2rem;
+  animation:fallPetal linear forwards;
+  pointer-events:none;
+  opacity:0.9;
+}
+@keyframes fallPetal{
+  to{transform:translateY(110vh) rotate(360deg);opacity:0}
+}
+</style>
+</head>
+
+<body>
+
+<audio id="bgMusic" loop>
+  <source src="perfect.mp3" type="audio/mpeg">
+</audio>
+
+<div class="container">
+
+<section class="hero page" id="page1">
+<h1>Will You Be My Valentine? 💕</h1>
+<p>Hey Captain Shrishtii 💖<br>I have something important to ask you 👀✨</p>
+<div class="button-container">
+<button class="btn btn-yes" id="yesBtn">YES 💖</button>
+<button class="btn btn-no" id="noBtn">No 😢</button>
+</div>
+<div id="noMessage"></div>
+</section>
+
+<section class="section page" id="page2" style="display:none">
+<h2 class="section-title">For You 💌</h2>
+<div class="envelope" id="envelope">
+  <div class="envelope-body"><div class="envelope-flap"></div></div>
+</div>
+<p style="text-align:center;margin:15px">Click the envelope 💖</p>
+<div class="letter-text" id="typedLetter"></div>
+<div class="next-btn" id="nextBtn"><button>Next 💖</button></div>
+</section>
+
+<section class="section page" id="page3" style="display:none">
+<h2 class="section-title">Our Story 📸</h2>
+<div class="photo-grid">
+  <div class="photo-card" onclick="revealPhoto(this)">
+    <div class="photo-placeholder">🖤</div>
+    <div class="photo-content"><img src="photo1.jpg"></div>
+  </div>
+  <div class="photo-card" onclick="revealPhoto(this)">
+    <div class="photo-placeholder">💑</div>
+    <div class="photo-content"><img src="photo2.jpg"></div>
+  </div>
+</div>
+<div class="next-btn" style="display:block">
+  <button onclick="goToPage4()">Next 💖</button>
+</div>
+</section>
+
+<section class="section page" id="page4" style="display:none">
+<h2 class="section-title">What You Did To Me 💖</h2>
+<div class="letter-text">
+<p>You gave me my smile back again — and that means more to me than you know.</p>
+<p>I was the boy who always made excuses not to go anywhere. Now I want to go wherever you go, just to be with you.</p>
+<p>I was the boy who hated crafts, who never imagined making something with his own hands — and yet I made a flower, smiling, because it was for you.</p>
+<p>You didn’t force change. You just existed. And everything changed in the most perfect way.</p>
+<p>You changed me beautifully. And I love you for that.</p>
+
+<div class="final-love">
+I love you ❤️<br>
+Can I be your boyfriend? 🛐
+</div>
+</div>
+</section>
+
+</div>
+
+<script>
+window.addEventListener('click',()=>{
+  const m=document.getElementById("bgMusic");
+  m.volume=0.4;
+  m.play();
+},{once:true});
+
+const yesBtn=document.getElementById("yesBtn");
+const noBtn=document.getElementById("noBtn");
+const noMsg=document.getElementById("noMessage");
+const page1=document.getElementById("page1");
+const page2=document.getElementById("page2");
+const page3=document.getElementById("page3");
+const page4=document.getElementById("page4");
+const envelope=document.getElementById("envelope");
+const typedLetter=document.getElementById("typedLetter");
+const nextBtn=document.getElementById("nextBtn");
+
+let scale=1,noClicks=0;
+const msgs=["Are you sure? 🥺","Think again 😏","Captain please 💖","No escape 😈"];
+
+function fireworks(n=30){
+  for(let i=0;i<n;i++){
+    const f=document.createElement("div");
+    f.className="firework";
+    f.style.background=`hsl(${Math.random()*360},100%,70%)`;
+    f.style.left="50vw";
+    f.style.top="50vh";
+    f.style.setProperty("--x",(Math.random()*400-200)+"px");
+    f.style.setProperty("--y",(Math.random()*400-200)+"px");
+    document.body.appendChild(f);
+    setTimeout(()=>f.remove(),1200);
+  }
+}
+
+function petals(count=30){
+  for(let i=0;i<count;i++){
+    const p=document.createElement("div");
+    p.className="petal";
+    p.innerText="🌸";
+    p.style.left=Math.random()*100+"vw";
+    p.style.animationDuration=(4+Math.random()*3)+"s";
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),7000);
+  }
+}
+
+function increaseMusic(){
+  const m=document.getElementById("bgMusic");
+  let vol=m.volume;
+  const interval=setInterval(()=>{
+    if(vol<0.85){
+      vol+=0.02;
+      m.volume=vol;
+    }else clearInterval(interval);
+  },200);
+}
+
+noBtn.onclick=()=>{
+  noClicks++; scale+=0.35;
+  yesBtn.style.transform=`scale(${scale})`;
+  noMsg.innerText=msgs[Math.min(noClicks-1,msgs.length-1)];
+  if(noClicks>=4)noBtn.style.display="none";
+};
+
+yesBtn.onclick=()=>{
+  fireworks(40);
+  setTimeout(()=>{
+    page1.style.display="none";
+    page2.style.display="block";
+  },800);
+};
+
+const letter=`Dear Captain Shrishtii 💖
+
+This letter is meant to be read slowly.
+Because every word here
+was written with a heart
+that thinks of you more often
+than it admits.
+
+I still remember the first time I saw your eyes.
+It wasn’t loud or dramatic,
+but something inside me shifted quietly.
+
+Your eyes feel warm.
+Your smile makes my heart forget how to be calm.
+Every time I see you, my heart races.
+
+You are perfect to me.
+The way you exist is enough to make my heart feel special.
+
+Always yours,
+Comrade Arush ❤️`;
+
+let i=0;
+function typeLetter(){
+  if(i<letter.length){
+    typedLetter.innerHTML+=letter[i]=="\n"?"<br>":letter[i];
+    i++;
+    setTimeout(typeLetter,40);
+  }else{
+    setTimeout(()=>{
+      const glow=document.createElement("div");
+      glow.className="glow-line";
+      glow.innerText="You are my favorite feeling. 💜";
+      typedLetter.appendChild(glow);
+      nextBtn.style.display="block";
+    },1200);
+  }
+}
+
+envelope.onclick=()=>{
+  envelope.classList.toggle("open");
+  typedLetter.innerHTML="";
+  i=0;
+  setTimeout(typeLetter,600);
+};
+
+nextBtn.onclick=()=>{
+  page2.style.display="none";
+  page3.style.display="block";
+  fireworks(50);
+};
+
+function goToPage4(){
+  page3.style.display="none";
+  page4.style.display="block";
+  fireworks(40);
+  petals(35);
+  increaseMusic();
+}
+
+function revealPhoto(card){
+  card.querySelector(".photo-placeholder").style.display="none";
+  card.querySelector(".photo-content").classList.add("revealed");
+}
+</script>
+
+</body>
+</html>
